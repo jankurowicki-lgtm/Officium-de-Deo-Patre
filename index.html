@@ -1,255 +1,477 @@
 <!DOCTYPE html>
-<html lang="la">
+<html lang="pl" data-theme="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Officium de Deo Patre</title>
     <style>
         :root {
-            --bg-color: #faf8f5;
-            --card-bg: #ffffff;
-            --text-color: #2b2b2b;
-            --rubric-color: #a81c1c;
-            --nav-bg: #eee9e0;
-            --nav-text: #555555;
-            --active-tab-bg: #a81c1c;
-            --active-tab-text: #ffffff;
-            --border-color: #e0d8cc;
-        }
-        body.dark-theme {
             --bg-color: #121212;
-            --card-bg: #1e1e1e;
             --text-color: #e0e0e0;
-            --rubric-color: #ff6b6b;
-            --nav-bg: #2a2a2a;
-            --nav-text: #aaa;
-            --active-tab-bg: #b82828;
-            --active-tab-text: #ffffff;
-            --border-color: #333333;
+            --header-bg: #1e1e1e;
+            --accent-color: #d4af37; /* Złoty akcent */
+            --rubric-color: #e57373; /* Delikatna czerwień akcentowa */
+            --card-bg: #1e1e1e;
+            --border-color: #333;
+            --nav-bg: #181818;
         }
-        body.sepia-theme {
-            --bg-color: #f4ebd9;
-            --card-bg: #fdf6e3;
+
+        [data-theme="light"] {
+            --bg-color: #f4f4f6;
+            --text-color: #1a1a1a;
+            --header-bg: #ffffff;
+            --accent-color: #8b0000;
+            --rubric-color: #b71c1c;
+            --card-bg: #ffffff;
+            --border-color: #ddd;
+            --nav-bg: #ffffff;
+        }
+
+        [data-theme="sepia"] {
+            --bg-color: #f4ecd8;
             --text-color: #433422;
+            --header-bg: #e6dcbe;
+            --accent-color: #5c4033;
             --rubric-color: #8b0000;
-            --nav-bg: #e6d7c3;
-            --nav-text: #665235;
-            --active-tab-bg: #8b0000;
-            --active-tab-text: #ffffff;
-            --border-color: #d8c4a8;
+            --card-bg: #fdfaf3;
+            --border-color: #d8ccb0;
+            --nav-bg: #e6dcbe;
         }
-        * { box-sizing: border-box; transition: background-color 0.25s, color 0.25s; }
+
         body {
-            font-family: 'Georgia', 'Times New Roman', serif;
             background-color: var(--bg-color);
             color: var(--text-color);
-            margin: 0; padding: 0; line-height: 1.7;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            font-size: var(--font-size, 16px);
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            transition: background 0.3s, color 0.3s;
         }
+
         header {
-            display: flex; justify-content: space-between; align-items: center;
-            padding: 15px 20px; background-color: var(--card-bg);
-            border-bottom: 1px solid var(--border-color); position: sticky; top: 0; z-index: 100;
+            background-color: var(--header-bg);
+            padding: 15px 20px;
+            border-bottom: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
         }
-        header h1 { font-size: 1.1rem; margin: 0; letter-spacing: 1.5px; color: var(--rubric-color); text-transform: uppercase; }
-        .theme-switcher { display: flex; gap: 8px; }
-        .theme-btn {
-            background: none; border: 1px solid var(--border-color); border-radius: 50%;
-            width: 28px; height: 28px; cursor: pointer; font-size: 0.8rem;
-            display: flex; align-items: center; justify-content: center; color: var(--text-color);
+
+        .header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
-        nav.tabs {
-            display: flex; overflow-x: auto; background-color: var(--nav-bg);
-            border-bottom: 1px solid var(--border-color); padding: 8px; gap: 6px;
+
+        h1 {
+            font-size: 1.2rem;
+            color: var(--accent-color);
+            margin: 0;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
-        nav.tabs::-webkit-scrollbar { display: none; }
-        .tab-btn {
-            background: transparent; border: none; color: var(--nav-text);
-            padding: 8px 14px; font-family: inherit; font-size: 0.85rem;
-            border-radius: 20px; white-space: nowrap; cursor: pointer; font-weight: 500;
+
+        .controls {
+            display: flex;
+            gap: 8px;
         }
-        .tab-btn.active { background-color: var(--active-tab-bg); color: var(--active-tab-text); font-weight: bold; }
-        main { max-width: 680px; margin: 0 auto; padding: 20px 15px 60px 15px; }
-        .office-section {
-            display: none; background: var(--card-bg); padding: 25px 20px;
-            border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.03); border: 1px solid var(--border-color);
+
+        button {
+            background: var(--border-color);
+            color: var(--text-color);
+            border: none;
+            padding: 6px 10px;
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 0.85rem;
         }
-        .office-section.active { display: block; }
-        h2 { font-size: 1.3rem; text-align: center; color: var(--rubric-color); margin-top: 0; margin-bottom: 25px; border-bottom: 1px double var(--border-color); padding-bottom: 10px; }
-        p { margin-bottom: 14px; text-align: justify; }
-        .versiculum { margin-left: 10px; text-indent: -10px; }
-        .rubric { color: var(--rubric-color); font-size: 0.85rem; font-style: italic; font-weight: bold; margin-top: 20px; margin-bottom: 5px; display: block; }
-        .cross { color: var(--rubric-color); font-weight: bold; }
-        hr.divider { border: 0; height: 1px; background: var(--border-color); margin: 25px 0; }
+
+        button:active {
+            transform: scale(0.95);
+        }
+
+        /* Pasek szybkiego wyboru godzin (Szybkie karty / Chipsy) */
+        .hour-nav {
+            display: flex;
+            gap: 8px;
+            overflow-x: auto;
+            padding: 12px 20px;
+            background: var(--nav-bg);
+            border-bottom: 1px solid var(--border-color);
+            scrollbar-width: none; /* Ukrycie paska przewijania w FF */
+        }
+        .hour-nav::-webkit-scrollbar { display: none; }
+
+        .hour-btn {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            padding: 8px 14px;
+            border-radius: 20px;
+            white-space: nowrap;
+            color: var(--text-color);
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .hour-btn.active {
+            background: var(--accent-color);
+            color: #fff;
+            border-color: var(--accent-color);
+        }
+
+        .container {
+            max-width: 700px;
+            margin: 20px auto;
+            padding: 0 15px;
+        }
+
+        .hour-section {
+            display: none;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.05);
+            animation: fadeIn 0.3s ease-in-out;
+        }
+
+        .hour-section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(6px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h2 {
+            font-size: 1.4rem;
+            color: var(--accent-color);
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 8px;
+            margin-top: 0;
+        }
+
+        .rubryka {
+            color: var(--rubric-color);
+            font-style: italic;
+            margin: 12px 0 6px 0;
+            display: block;
+        }
+
+        p {
+            margin: 8px 0;
+            text-align: justify;
+        }
+
+        .versiculum {
+            margin: 10px 0;
+            padding-left: 12px;
+            border-left: 3px solid var(--accent-color);
+        }
+
+        .back-top {
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        .back-top a {
+            color: var(--accent-color);
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 0.9rem;
+        }
     </style>
 </head>
 <body>
+
     <header>
-        <h1>Officium de Deo Patre</h1>
-        <div class="theme-switcher">
-            <button class="theme-btn" onclick="setTheme('light')" title="Jasny">☀️</button>
-            <button class="theme-btn" onclick="setTheme('sepia')" title="Sepia">📜</button>
-            <button class="theme-btn" onclick="setTheme('dark')" title="Ciemny">🌙</button>
+        <div class="header-top">
+            <h1>Officium de Deo Patre</h1>
+            <div class="controls">
+                <button onclick="changeFontSize(-1)" title="Zmniejsz czcionkę">A-</button>
+                <button onclick="changeFontSize(1)" title="Zwiększ czcionkę">A+</button>
+                <button onclick="toggleTheme()" id="themeBtn" title="Zmień motyw">🌙</button>
+            </div>
         </div>
     </header>
 
-    <nav class="tabs" id="tabs-container">
-        <button class="tab-btn" id="btn-matutinum" onclick="openOffice('matutinum')">Matutínum (06h)</button>
-        <button class="tab-btn" id="btn-prima" onclick="openOffice('prima')">Prima (07h)</button>
-        <button class="tab-btn" id="btn-tertia" onclick="openOffice('tertia')">Tertia (09h)</button>
-        <button class="tab-btn" id="btn-sexta" onclick="openOffice('sexta')">Sexta (12h)</button>
-        <button class="tab-btn" id="btn-nona" onclick="openOffice('nona')">Nona (15h)</button>
-        <button class="tab-btn" id="btn-vesperae" onclick="openOffice('vesperae')">Vesperæ (18h)</button>
-        <button class="tab-btn" id="btn-completorium" onclick="openOffice('completorium')">Completorium (21h)</button>
-    </nav>
+    <!-- Poziomy panel wyboru godzin -->
+    <div class="hour-nav" id="hourNav">
+        <button class="hour-btn active" onclick="showHour('matutinum')">Jutrznia</button>
+        <button class="hour-btn" onclick="showHour('prima')">Prima</button>
+        <button class="hour-btn" onclick="showHour('tercia')">Tercia</button>
+        <button class="hour-btn" onclick="showHour('sexta')">Sexta</button>
+        <button class="hour-btn" onclick="showHour('nona')">Nona</button>
+        <button class="hour-btn" onclick="showHour('visperas')">Nieszpory</button>
+        <button class="hour-btn" onclick="showHour('completas')">Kompleta</button>
+    </div>
 
-    <main>
-        <article id="matutinum" class="office-section">
-            <h2>AD MATUTÍNUM (06:00h)</h2>
-            <p><span class="cross">†</span> In nómine Patris, et Fílii, et Spíritus Sancti. Amen.</p>
+    <div class="container">
+
+        <!-- 1. MATUTINUM -->
+        <div id="matutinum" class="hour-section active">
+            <h2>Ad Matutínum (Jutrznia – przed 06:00)</h2>
+            <span class="rubryka">† In nómine Patris, et Fílii, et Spíritus Sancti. Amen.</span>
             <p>Te Deum Patrem laudámus, Te Conditórem cœli et terræ confitémur.</p>
-            <p class="versiculum">℣. Dómine <span class="cross">✝</span>, lábia mea apéries.<br>℟. Et os meum annuntiábit laudem tuam.<br>℣. Deus <span class="cross">✝</span> Pater, in adjutórium meum inténde.<br>℟. Dómine, ad adjuvándum me festína.<br>℣. Glória Patri, et Fílio, et Spirítui Sancto.<br>℟. Sicut erat in princípio, et nunc, et semper, et in sǽcula sæculórum. Amen Allelúja: Laus tibi, Dómine, Rex ætérnæ glóriæ.</p>
-            <span class="rubric">Hymnus</span>
+            <div class="versiculum"><b>℣.</b> Dómine ✝, lábia mea apéries.<br><b>℟.</b> Et os meum annuntiábit laudem tuam.</div>
+            <div class="versiculum"><b>℣.</b> Deus ✝ Pater, in adjutórium meum inténde.<br><b>℟.</b> Dómine, ad adjuvándum me festína.</div>
+            <div class="versiculum"><b>℣.</b> Glória Patri, et Fílio, et Spirítui Sancto.<br><b>℟.</b> Sicut erat in princípio, et nunc, et semper, et in sǽcula sæculórum. Amen. <span class="rubryka">(Od Septuagesimy do Wielkanocy zamiast Alleluja mówi się: Laus tibi, Dómine, Rex ætérnæ glóriæ.)</span></div>
+
+            <span class="rubryka">Hymnus:</span>
             <p>Lucis Creátor óptime,<br>Lucem diérum próferens,<br>Primórdiis lucis novæ,<br>Mundi parans oríginem:<br>Qui mane junctum vésperi<br>Diem vocári prǽcipis:<br>Vitémus omne nóxium:<br>Purgémus omne péssimum.</p>
-            <span class="rubric">Antíphona</span>
+
+            <span class="rubryka">Antíphona:</span>
             <p>Benedíctio, et cláritas, et sapiéntia, et gratiárum áctio, honor, virtus et fortitúdo Deo Patri in sǽcula sæculórum. Amen.</p>
-            <p class="versiculum">℣. Benedicámus Deum Patrem.<br>℟. Laudémus et superexaltémus Eum in sǽcula.</p>
-            <span class="rubric">Orémus</span>
-            <p>Da nobis, quǽsumus, omnípotens ætérne Deus, auxílium grátiæ tuæ, ut qui Te Patrem ingénitum, Deum verum, Creatórem cœli et terræ, visibílium ómnium et invisibílium, esse crédimus, in exequéndis quóque mandátis tuis, voluntáte et actióne semper Tibi placeámus, qui Deus es in sǽcula sæculórum. Amen.</p>
-            <p class="versiculum">℣. Dómine, exáudi oratiónem meam.<br>℟. Et clamor meus ad te véniat.<br>℣. Benedicámus Dómino.<br>℟. Deo grátias.<br>℣. Fidélium ánimæ per misericórdiam Dei requiéscant in pace.<br>℟. Amen.</p>
-            <p><span class="cross">†</span> In nómine Patris, et Fílii, et Spíritus Sancti. Amen.</p>
-        </article>
 
-        <article id="prima" class="office-section">
-            <h2>AD PRIMAM (07:00h)</h2>
-            <p><span class="cross">†</span> In nómine Patris, et Fílii, et Spíritus Sancti. Amen.</p>
+            <div class="versiculum"><b>℣.</b> Benedicámus Deum Patrem.<br><b>℟.</b> Laudémus et superexaltémus Eum in sǽcula.</div>
+
+            <span class="rubryka">Orémus:</span>
+            <p>Da nobis, quǽsumus, omnípotens ætérne Deus, auxílium grátiæ tuæ, ut qui Te Patrem ingénitum, Deum verum, Creatórem cœli et terræ, visibílium ómnium et invisibílium, esse crédimus, in exequéndis quóque mandátis tuis, voluntáte et actióne semper Tibi placeámus, qui Deus es in sǽcula sæculórum. Amen.</p>
+
+            <div class="versiculum"><b>℣.</b> Dómine, exáudi oratiónem meam.<br><b>℟.</b> Et clamor meus ad te véniat.<br><b>℣.</b> Benedicámus Dómino.<br><b>℟.</b> Deo grátias.<br><b>℣.</b> Fidélium ánimæ per misericórdiam Dei requiéscant in pace.<br><b>℟.</b> Amen.</div>
+            <span class="rubryka">† In nómine Patris, et Fílii, et Spíritus Sancti. Amen.</span>
+            
+            <div class="back-top"><a href="#top" onclick="scrollToTop()">⬆ Wróć na górę</a></div>
+        </div>
+
+        <!-- 2. PRIMA -->
+        <div id="prima" class="hour-section">
+            <h2>Ad Primam (Pierwsza godzina – 07:00)</h2>
+            <span class="rubryka">† In nómine Patris, et Fílii, et Spíritus Sancti. Amen.</span>
             <p>Te Deum Patrem laudámus, Te Conditórem cœli et terræ confitémur.</p>
-            <p class="versiculum">℣. Deus <span class="cross">✝</span>, in adjutórium meum inténde.<br>℟. Dómine, ad adjuvándum me festína.<br>℣. Glória Patri, et Fílio, et Spirítui Sancto.<br>℟. Sicut erat in princípio, et nunc, et semper, et in sǽcula sæculórum. Amen. Allelúja: Laus tibi, Dómine, Rex ætérnæ glóriæ.</p>
-            <span class="rubric">Hymnus</span>
+            <div class="versiculum"><b>℣.</b> Deus ✝, in adjutórium meum inténde.<br><b>℟.</b> Dómine, ad adjuvándum me festína.<br><b>℣.</b> Glória Patri, et Fílio, et Spirítui Sancto.<br><b>℟.</b> Sicut erat in princípio, et nunc, et semper, et in sǽcula sæculórum. Amen. <span class="rubryka">(Od Septuagesimy do Wielkanocy: Laus tibi, Dómine, Rex ætérnæ glóriæ.)</span></div>
+
+            <span class="rubryka">Hymnus:</span>
             <p>Imménse cœli Cónditor,<br>Qui mixta ne confúnderent,<br>Aquæ fluénta dívidens,<br>Cœlum dedísti límitem.<br>Infúnde nunc, piíssime,<br>Donum perénnis grátiæ:<br>Fraudis novæ ne cásibus<br>Nos error átterat vetus.</p>
-            <span class="rubric">Antíphona</span>
+
+            <span class="rubryka">Antíphona:</span>
             <p>Benedíctus Dóminus Deus Israël, qui fecit mirabília solus, et benedíctum nomen Majestátis Ejus in ætérnum.</p>
-            <p class="versiculum">℣. Benedicámus Deum Patrem.<br>℟. Laudémus et superexaltémus Eum in sǽcula.</p>
-            <span class="rubric">Orémus</span>
-            <p>Da nobis, quǽsumus, omnípotens ætérne Deus, auxílium grátiæ tuæ, ut qui Te Patrem ingénitum, Deum verum, Creatórem cœli et terræ, visibílium ómnium et invisibílium, esse crédimus, in exequéndis quóque mandátis tuis, voluntáte et actióne semper Tibi placeámus, qui Deus es in sǽcula sæculórum. Amen.</p>
-            <p class="versiculum">℣. Dómine, exáudi oratiónem meam.<br>℟. Et clámor meus ad te véniat.<br>℣. Benedicámus Dómino.<br>℟. Deo grátias.<br>℣. Fidélium ánimæ per misericórdiam Dei requiéscant in pace.<br>℟. Amen.</p>
-            <p><span class="cross">†</span> In nómine Patris, et Fílii, et Spíritus Sancti. Amen.</p>
-        </article>
 
-        <article id="tertia" class="office-section">
-            <h2>AD TERTIAM (09:00h)</h2>
-            <p><span class="cross">†</span> In nómine Patris, et Fílii, et Spíritus Sancti. Amen.</p>
+            <div class="versiculum"><b>℣.</b> Benedicámus Deum Patrem.<br><b>℟.</b> Laudémus et superexaltémus Eum in sǽcula.</div>
+
+            <span class="rubryka">Orémus:</span>
+            <p>Da nobis, quǽsumus, omnípotens ætérne Deus, auxílium grátiæ tuæ, ut qui Te Patrem ingénitum, Deum verum, Creatórem cœli et terræ, visibílium ómnium et invisibílium, esse crédimus, in exequéndis quóque mandátis tuis, voluntáte et actióne semper Tibi placeámus, qui Deus es in sǽcula sæculórum. Amen.</p>
+
+            <div class="versiculum"><b>℣.</b> Dómine, exáudi oratiónem meam.<br><b>℟.</b> Et clámor meus ad te véniat.<br><b>℣.</b> Benedicámus Dómino.<br><b>℟.</b> Deo grátias.<br><b>℣.</b> Fidélium ánimæ per misericórdiam Dei requiéscant in pace.<br><b>℟.</b> Amen.</div>
+            <span class="rubryka">† In nómine Patris, et Fílii, et Spíritus Sancti. Amen.</span>
+            
+            <div class="back-top"><a href="#top" onclick="scrollToTop()">⬆ Wróć na górę</a></div>
+        </div>
+
+        <!-- 3. TERCIA -->
+        <div id="tercia" class="hour-section">
+            <h2>Ad Tertiam (Trzecia godzina – 09:00)</h2>
+            <span class="rubryka">† In nómine Patris, et Fílii, et Spíritus Sancti. Amen.</span>
             <p>Te Deum Patrem laudámus, Te Conditórem cœli et terræ confitémur.</p>
-            <p class="versiculum">℣. Deus <span class="cross">✝</span>, in adjutórium meum inténde.<br>℟. Dómine, ad adjuvándum me festína.<br>℣. Glória Patri, et Fílio, et Spirítui Sancto.<br>℟. Sicut erat in princípio, et nunc, et semper, et in sǽcula sæculórum. Amen. Allelúja: Laus tibi, Dómine, Rex ætérnæ glóriæ.</p>
-            <span class="rubric">Hymnus</span>
+            <div class="versiculum"><b>℣.</b> Deus ✝, in adjutórium meum inténde.<br><b>℟.</b> Dómine, ad adjuvándum me festína.<br><b>℣.</b> Glória Patri, et Fílio, et Spirítui Sancto.<br><b>℟.</b> Sicut erat in princípio, et nunc, et semper, et in sǽcula sæculórum. Amen. <span class="rubryka">(Od Septuagesimy do Wielkanocy: Laus tibi, Dómine, Rex ætérnæ glóriæ.)</span></div>
+
+            <span class="rubryka">Hymnus:</span>
             <p>Tellúris alme Cónditor!<br>Mundi solum qui séparans,<br>Pulsis áquæ moléstiis<br>Terram dedísti immóbilem.<br>Ut germen aptum próferens<br>Staret decóra flóribus,<br>Munda viróre grátiæ<br>Mentis perústæ vúlnera.</p>
-            <span class="rubric">Antíphona</span>
+
+            <span class="rubryka">Antíphona:</span>
             <p>Benedíctus es Dómine Deus Pater in firmaménto cœli, et laudábilis, et gloriósus, et superexaltátus in sǽcula.</p>
-            <p class="versiculum">℣. Benedicámus Deum Patrem.<br>℟. Laudémus et superexaltémus Eum in sǽcula.</p>
-            <span class="rubric">Orémus</span>
-            <p>Da nobis, quǽsumus, omnípotens ætérne Deus, auxílium grátiæ tuæ, ut qui Te Patrem ingénitum, Deum verum, Creatórem cœli et terræ, visibílium ómnium et invisibílium, esse crédimus, in exequéndis quóque mandátis tuis, voluntáte et actióne semper Tibi placeámus, qui Deus es in sǽcula sæculórum. Amen.</p>
-            <p class="versiculum">℣. Dómine, exáudi oratiónem meam.<br>℟. Et clamor meus ad te véniat.<br>℣. Benedicámus Dómino.<br>℟. Deo grátias.<br>℣. Fidélium ánimæ per misericórdiam Dei requiéscant in pace.<br>℟. Amen.</p>
-            <p><span class="cross">†</span> In nómine Patris, et Fílii, et Spíritus Sancti. Amen.</p>
-        </article>
 
-        <article id="sexta" class="office-section">
-            <h2>AD SEXTAM (12:00h)</h2>
-            <p><span class="cross">†</span> In nómine Patris, et Fílii, et Spíritus Sancti. Amen.</p>
+            <div class="versiculum"><b>℣.</b> Benedicámus Deum Patrem.<br><b>℟.</b> Laudémus et superexaltémus Eum in sǽcula.</div>
+
+            <span class="rubryka">Orémus:</span>
+            <p>Da nobis, quǽsumus, omnípotens ætérne Deus, auxílium grátiæ tuæ, ut qui Te Patrem ingénitum, Deum verum, Creatórem cœli et terræ, visibílium ómnium et invisibílium, esse crédimus, in exequéndis quóque mandátis tuis, voluntáte et actióne semper Tibi placeámus, qui Deus es in sǽcula sæculórum. Amen.</p>
+
+            <div class="versiculum"><b>℣.</b> Dómine, exáudi oratiónem meam.<br><b>℟.</b> Et clamor meus ad te véniat.<br><b>℣.</b> Benedicámus Dómino.<br><b>℟.</b> Deo grátias.<br><b>℣.</b> Fidélium ánimæ per misericórdiam Dei requiéscant in pace.<br><b>℟.</b> Amen.</div>
+            <span class="rubryka">† In nómine Patris, et Fílii, et Spíritus Sancti. Amen.</span>
+            
+            <div class="back-top"><a href="#top" onclick="scrollToTop()">⬆ Wróć na górę</a></div>
+        </div>
+
+        <!-- 4. SEXTA -->
+        <div id="sexta" class="hour-section">
+            <h2>Ad Sextam (Szósta godzina – 12:00)</h2>
+            <span class="rubryka">† In nómine Patris, et Fílii, et Spíritus Sancti. Amen.</span>
             <p>Te Deum Patrem laudámus, Te Conditórem cœli et terræ confitémur.</p>
-            <p class="versiculum">℣. Deus <span class="cross">✝</span> Pater, in adjutórium meum inténde.<br>℟. Dómine, ad adjuvándum me festína.<br>℣. Glória Patri, et Fílio, et Spirítui Sancto.<br>℟. Sicut erat in princípio, et nunc, et semper, et in sǽcula sæculórum. Amen. Allelúja : Laus tibi, Dómine, Rex ætérnæ glóriæ.</p>
-            <span class="rubric">Hymnus</span>
+            <div class="versiculum"><b>℣.</b> Deus ✝ Pater, in adjutórium meum inténde.<br><b>℟.</b> Dómine, ad adjuvándum me festína.<br><b>℣.</b> Glória Patri, et Fílio, et Spirítui Sancto.<br><b>℟.</b> Sicut erat in princípio, et nunc, et semper, et in sǽcula sæculórum. Amen. <span class="rubryka">(Od Septuagesimy do Wielkanocy: Laus tibi, Dómine, Rex ætérnæ glóriæ.)</span></div>
+
+            <span class="rubryka">Hymnus:</span>
             <p>Cœli Deus sanctíssime!<br>Qui lúcidas mundi plagas,<br>Candóre pingis ígneo,<br>Áugens decóro lúmine.<br>Expélle noctem córdium:<br>Abstérge sordes méntium:<br>Resólve culpæ vínculum:<br>Evérte moles críminum.</p>
-            <span class="rubric">Antíphona</span>
+
+            <span class="rubryka">Antíphona:</span>
             <p>Deo Patri laus et perénnis glória, ante ómnia sǽcula, nunc et in perpétuum.</p>
-            <p class="versiculum">℣. Benedicámus Deum Patrem.<br>℟. Laudémus et superexaltémus Eum in sǽcula.</p>
-            <span class="rubric">Orémus</span>
-            <p>Da nobis, quǽsumus, omnípotens ætérne Deus, auxílium grátiæ tuæ, ut qui Te Patrem ingénitum, Deum verum, Creatórem cœli et terræ, visibílium ómnium et invisibílium, esse crédimus, in exequéndis quóque mandátis tuis, voluntáte et actióne semper Tibi placeámus, qui Deus es in sǽcula sæculórum. Amen.</p>
-            <p class="versiculum">℣. Dómine, exáudi oratiónem meam.<br>℟. Et clamor meus ad te véniat.<br>℣. Benedicámus Dómino.<br>℟. Deo grátias.<br>℣. Fidélium ánimæ per misericórdiam Dei requiéscant in pace.<br>℟. Amen.</p>
-            <p><span class="cross">†</span> In nómine Patris, et Fílii, et Spíritus Sancti. Amen.</p>
-        </article>
 
-        <article id="nona" class="office-section">
-            <h2>AD NONAM (15:00h)</h2>
-            <p><span class="cross">†</span> In nómine Patris, et Fílii, et Spíritus Sancti. Amen.</p>
+            <div class="versiculum"><b>℣.</b> Benedicámus Deum Patrem.<br><b>℟.</b> Laudémus et superexaltémus Eum in sǽcula.</div>
+
+            <span class="rubryka">Orémus:</span>
+            <p>Da nobis, quǽsumus, omnípotens ætérne Deus, auxílium grátiæ tuæ, ut qui Te Patrem ingénitum, Deum verum, Creatórem cœli et terræ, visibílium ómnium et invisibílium, esse crédimus, in exequéndis quóque mandátis tuis, voluntáte et actióne semper Tibi placeámus, qui Deus es in sǽcula sæculórum. Amen.</p>
+
+            <div class="versiculum"><b>℣.</b> Dómine, exáudi oratiónem meam.<br><b>℟.</b> Et clamor meus ad te véniat.<br><b>℣.</b> Benedicámus Dómino.<br><b>℟.</b> Deo grátias.<br><b>℣.</b> Fidélium ánimæ per misericórdiam Dei requiéscant in pace.<br><b>℟.</b> Amen.</div>
+            <span class="rubryka">† In nómine Patris, et Fílii, et Spíritus Sancti. Amen.</span>
+            
+            <div class="back-top"><a href="#top" onclick="scrollToTop()">⬆ Wróć na górę</a></div>
+        </div>
+
+        <!-- 5. NONA -->
+        <div id="nona" class="hour-section">
+            <h2>Ad Nonam (Dziewiąta godzina – 15:00)</h2>
+            <span class="rubryka">† In nómine Patris, et Fílii, et Spíritus Sancti. Amen.</span>
             <p>Te Deum Patrem laudámus, Te Conditórem cœli et terræ confitémur.</p>
-            <p class="versiculum">℣. Deus <span class="cross">✝</span> Pater, in adjutórium meum inténde.<br>℟. Dómine, ad adjuvándum me festína.<br>℣. Glória Patri, et Fílio, et Spirítui Sancto.<br>℟. Sicut erat in princípio, et nunc, et semper, et in sǽcula sæculórum. Amen. Allelúja : Laus tibi, Dómine, Rex ætérnæ glóriæ.</p>
-            <span class="rubric">Hymnus</span>
+            <div class="versiculum"><b>℣.</b> Deus ✝ Pater, in adjutórium meum inténde.<br><b>℟.</b> Dómine, ad adjuvándum me festína.<br><b>℣.</b> Glória Patri, et Fílio, et Spirítui Sancto.<br><b>℟.</b> Sicut erat in princípio, et nunc, et semper, et in sǽcula sæculórum. Amen. <span class="rubryka">(Od Septuagesimy do Wielkanocy: Laus tibi, Dómine, Rex ætérnæ glóriæ.)</span></div>
+
+            <span class="rubryka">Hymnus:</span>
             <p>Magnæ Deus poténtiæ!<br>Qui fértili natos áqua<br>Partim relínquis gúrgiti,<br>Partim levas in áëra.<br>Ut culpa nullum déprimat:<br>Nullum éfferat jactántia:<br>Elísa mens ne cóncidat:<br>Eláta mens ne córruat.</p>
-            <span class="rubric">Antíphona</span>
-            <p>Glória láudis resónet in ore ómnium Deo Patri, et resúltet láude perénni. (Matth. 2, 23)</p>
-            <p class="versiculum">℣. Benedicámus Deum Patrem.<br>℟. Laudémus et superexaltémus Eum in sǽcula.</p>
-            <span class="rubric">Orémus</span>
-            <p>Da nobis, quǽsumus, omnípotens ætérne Deus, auxílium grátiæ tuæ, ut qui Te Patrem ingénitum, Deum verum, Creatórem cœli et terræ, visibílium ómnium et invisibílium, esse crédimus, in exequéndis quóque mandátis tuis, voluntáte et actióne semper Tibi placeámus, qui Deus es in sǽcula sæculórum. Amen.</p>
-            <p class="versiculum">℣. Dómine, exáudi oratiónem meam.<br>℟. Et clamor meus ad te véniat.<br>℣. Benedicámus Dómino.<br>℟. Deo grátias.<br>℣. Fidélium ánimæ per misericórdiam Dei requiéscant in pace.<br>℟. Amen.</p>
-            <p><span class="cross">†</span> In nómine Patris, et Fílii, et Spíritus Sancti. Amen.</p>
-        </article>
 
-        <article id="vesperae" class="office-section">
-            <h2>AD VÉSPERAS (18:00h)</h2>
-            <p><span class="cross">†</span> In nómine Patris, et Fílii, et Spíritus Sancti. Amen.</p>
+            <span class="rubryka">Antíphona:</span>
+            <p>Glória láudis resónet in ore ómnium Deo Patri, et resúltet láude perénni.</p>
+
+            <div class="versiculum"><b>℣.</b> Benedicámus Deum Patrem.<br><b>℟.</b> Laudémus et superexaltémus Eum in sǽcula.</div>
+
+            <span class="rubryka">Orémus:</span>
+            <p>Da nobis, quǽsumus, omnípotens ætérne Deus, auxílium grátiæ tuæ, ut qui Te Patrem ingénitum, Deum verum, Creatórem cœli et terræ, visibílium ómnium et invisibílium, esse crédimus, in exequéndis quóque mandátis tuis, voluntáte et actióne semper Tibi placeámus, qui Deus es in sǽcula sæculórum. Amen.</p>
+
+            <div class="versiculum"><b>℣.</b> Dómine, exáudi oratiónem meam.<br><b>℟.</b> Et clamor meus ad te véniat.<br><b>℣.</b> Benedicámus Dómino.<br><b>℟.</b> Deo grátias.<br><b>℣.</b> Fidélium ánimæ per misericórdiam Dei requiéscant in pace.<br><b>℟.</b> Amen.</div>
+            <span class="rubryka">† In nómine Patris, et Fílii, et Spíritus Sancti. Amen.</span>
+            
+            <div class="back-top"><a href="#top" onclick="scrollToTop()">⬆ Wróć na górę</a></div>
+        </div>
+
+        <!-- 6. VÉSPERAS -->
+        <div id="visperas" class="hour-section">
+            <h2>Ad Vésperas (Nieszpory – 18:00)</h2>
+            <span class="rubryka">† In nómine Patris, et Fílii, et Spíritus Sancti. Amen.</span>
             <p>Te Deum Patrem laudámus, Te Conditórem cœli et terræ confitémur.</p>
-            <p class="versiculum">℣. Deus <span class="cross">✝</span> Pater, in adjutórium meum inténde.<br>℟. Dómine, ad adjuvándum me festína.<br>℣. Glória Patri, et Fílio, et Spirítui Sancto.<br>℟. Sicut erat in princípio, et nunc, et semper, et in sǽcula sæculórum. Amen. Allelúja : Laus tibi, Dómine, Rex ætérnæ glóriæ.</p>
-            <span class="rubric">Hymnus</span>
+            <div class="versiculum"><b>℣.</b> Deus ✝ Pater, in adjutórium meum inténde.<br><b>℟.</b> Dómine, ad adjuvándum me festína.<br><b>℣.</b> Glória Patri, et Fílio, et Spirítui Sancto.<br><b>℟.</b> Sicut erat in princípio, et nunc, et semper, et in sǽcula sæculórum. Amen. <span class="rubryka">(Od Septuagesimy do Wielkanocy: Laus tibi, Dómine, Rex ætérnæ glóriæ.)</span></div>
+
+            <span class="rubryka">Hymnus:</span>
             <p>Hóminis supérne Cónditor!<br>Qui cuncta solus órdinans,<br>Humum jubes prodúcere,<br>Reptántis et feræ genus:<br>Et magna rerum córpora,<br>Da gaudiórum prǽmia,<br>Da gratiárum múnera,<br>Astrínge pacis fœ́dera.</p>
-            <span class="rubric">Antíphona</span>
-            <p>Benedíctus sit Deus Pater, Creátor et Gubernátor ómnium, nunc et semper, et per infiníta sǽcula sæculórum.</p>
-            <p class="versiculum">℣. Benedicámus Deum Patrem.<br>℟. Laudémus et superexaltémus Eum in sǽcula.</p>
-            <span class="rubric">Orémus</span>
-            <p>Da nobis, quǽsumus, omnípotens ætérne Deus, auxílium grátiæ tuæ, ut qui Te Patrem ingénitum, Deum verum, Creatórem cœli et terræ, visibílium ómnium et invisibílium, esse crédimus, in exequéndis quóque mandátis tuis, voluntáte et actióne semper Tibi placeámus, qui Deus es in sǽcula sæculórum. Amen.</p>
-            <p class="versiculum">℣. Dómine, exáudi oratiónem meam.<br>℟. Et clamor meus ad te véniat.<br>℣. Benedicámus Dómino.<br>℟. Deo grátias.<br>℣. Fidélium ánimæ per misericórdiam Dei requiéscant in pace.<br>℟. Amen.</p>
-            <p><span class="cross">†</span> In nómine Patris, et Fílii, et Spíritus Sancti. Amen.</p>
-        </article>
 
-        <article id="completorium" class="office-section">
-            <h2>AD COMPLETORIUM (21:00h)</h2>
-            <p><span class="cross">†</span> In nómine Patris, et Fílii, et Spíritus Sancti. Amen.</p>
-            <p>Te Deum Patrem laudámus, Te Conditórem cœli et terræ confitémur.</p>
-            <p class="versiculum">℣. Convérte nos ☨ Deus, salutáris noster.<br>℟. Et avérte iram tuam a nobis.<br>℣. Deus <span class="cross">✝</span> Pater, in adjutórium meum inténde.<br>℟. Dómine, ad adjuvándum me festína.<br>℣. Glória Patri, et Fílio, et Spirítui Sancto.<br>℟. Sicut erat in princípio, et nunc, et semper, et in sǽcula sæculórum. Amen Allelúja,: Laus tibi, Dómine, Rex ætérnæ glóriæ.</p>
-            <span class="rubric">Hymnus</span>
-            <p>Scrutátor alme córdium,<br>Infírma tu scis vírium:<br>Ad te revérsis éxhibe<br>Remissiónis grátiam.<br>Multum quidem peccávimus,<br>Sed parce confiténtibus:<br>Confer medélam lánguidis,<br>Infúnde lumen córdibus.<br>Te mane laudum cármine,<br>Te deprecámur véspere;<br>Dignéris ut te súpplices<br>Laudémus inter cœ́lites. Amen.</p>
-            <span class="rubric">Antíphona</span>
-            <p>Te Deum laudámus, Te Dóminum confitémur, Te ætérnum Patrem omnis terra venerátur.</p>
-            <p class="versiculum">℣. Benedicámus Deum Patrem.<br>℟. Laudémus et superexaltémus Eum in sǽcula.</p>
-            <span class="rubric">Orémus</span>
+            <span class="rubryka">Antíphona:</span>
+            <p>Benedíctus sit Deus Pater, Creátor et Gubernátor ómnium, nunc et semper, et per infiníta sǽcula sæculórum.</p>
+
+            <div class="versiculum"><b>℣.</b> Benedicámus Deum Patrem.<br><b>℟.</b> Laudémus et superexaltémus Eum in sǽcula.</div>
+
+            <span class="rubryka">Orémus:</span>
             <p>Da nobis, quǽsumus, omnípotens ætérne Deus, auxílium grátiæ tuæ, ut qui Te Patrem ingénitum, Deum verum, Creatórem cœli et terræ, visibílium ómnium et invisibílium, esse crédimus, in exequéndis quóque mandátis tuis, voluntáte et actióne semper Tibi placeámus, qui Deus es in sǽcula sæculórum. Amen.</p>
-            <p class="versiculum">℣. Dómine, exáudi oratiónem meam.<br>℟. Et clamor meus ad te véniat.<br>℣. Benedicámus Dómino.<br>℟. Deo grátias.<br>℣. Fidélium ánimæ per misericórdiam Dei requiéscant in pace.<br>℟. Amen.</p>
-            <hr class="divider">
-            <span class="rubric">Oblatio</span>
-            <p>Clementíssime Pater, ætérne Deus! pro ómnibus peccátis meis et pro peccátis tótius mundi, óffero Tibi Unigénitum tuum in Cruce pendéntem, omnem quóque passiónem, dolórem, angústiam, pressúram, sánguinem, ac mortem Ejus. Óffero Tibi ea in charitáte et virtúte, qua olim Semetípsum óbtulit pro nobis in ara Crucis. In ejúsdem oblatiónis unióne, óffero meípsum Tibi in láudem, et glóriam, ac beneplácitum tuum sempitérnum. Amen</p>
-            <p><span class="cross">†</span> In nómine Patris, et Fílii, et Spíritus Sancti. Amen.</p>
-        </article>
-    </main>
+
+            <div class="versiculum"><b>℣.</b> Dómine, exáudi oratiónem meam.<br><b>℟.</b> Et clamor meus ad te véniat.<br><b>℣.</b> Benedicámus Dómino.<br><b>℟.</b> Deo grátias.<br><b>℣.</b> Fidélium ánimæ per misericórdiam Dei requiéscant in pace.<br><b>℟.</b> Amen.</div>
+            <span class="rubryka">† In nómine Patris, et Fílii, et Spíritus Sancti. Amen.</span>
+            
+            <div class="back-top"><a href="#top" onclick="scrollToTop()">⬆ Wróć na górę</a></div>
+        </div>
+
+        <!-- 7. COMPLETORIUM -->
+        <div id="completas" class="hour-section">
+            <h2>Ad Completórium (Kompleta – 21:00)</h2>
+            <span class="rubryka">† In nómine Patris, et Fílii, et Spíritus Sancti. Amen.</span>
+            <p>Te Deum Patrem laudámus, Te Conditórem cœli et terræ confitémur.</p>
+            <div class="versiculum"><b>℣.</b> Convérte nos ☨ Deus, salutáris noster.<br><b>℟.</b> Et avérte iram tuam a nobis.</div>
+            <div class="versiculum"><b>℣.</b> Deus ✝ Pater, in adjutórium meum inténde.<br><b>℟.</b> Dómine, ad adjuvándum me festína.</div>
+            <div class="versiculum"><b>℣.</b> Glória Patri, et Fílio, et Spirítui Sancto.<br><b>℟.</b> Sicut erat in princípio, et nunc, et semper, et in sǽcula sæculórum. Amen. <span class="rubryka">(Od Septuagesimy do Wielkanocy: Laus tibi, Dómine, Rex ætérnæ glóriæ.)</span></div>
+
+            <span class="rubryka">Hymnus:</span>
+            <p>Scrutátor alme córdium,<br>Infírma tu scis vírium:<br>Ad te revérsis éxhibe<br>Remissiónis grátiam.<br>Multum quidem peccávimus,<br>Sed parce confiténtibus:<br>Confer medélam lánguidis,<br>Infúnde lumen córdibus.<br>Te mane laudum cármine,<br>Te deprecámur véspere;<br>Dignéris ut te súpplices<br>Laudémus inter cœlites. Amen.</p>
+
+            <span class="rubryka">Antíphona:</span>
+            <p>Te Deum laudámus, Te Dóminum confitémur, Te ætérnum Patrem omnis terra venerátur.</p>
+
+            <div class="versiculum"><b>℣.</b> Benedicámus Deum Patrem.<br><b>℟.</b> Laudémus et superexaltémus Eum in sǽcula.</div>
+
+            <span class="rubryka">Orémus:</span>
+            <p>Da nobis, quǽsumus, omnípotens ætérne Deus, auxílium grátiæ tuæ, ut qui Te Patrem ingénitum, Deum verum, Creatórem cœli et terræ, visibílium ómnium et invisibílium, esse crédimus, in exequéndis quóque mandátis tuis, voluntáte et actióne semper Tibi placeámus, qui Deus es in sǽcula sæculórum. Amen.</p>
+
+            <div class="versiculum"><b>℣.</b> Dómine, exáudi oratiónem meam.<br><b>℟.</b> Et clamor meus ad te véniat.<br><b>℣.</b> Benedicámus Dómino.<br><b>℟.</b> Deo grátias.<br><b>℣.</b> Fidélium ánimæ per misericórdiam Dei requiéscant in pace.<br><b>℟.</b> Amen.</div>
+            <span class="rubryka">† In nómine Patris, et Fílii, et Spíritus Sancti. Amen.</span>
+
+            <span class="rubryka">Oblatio (Ofiarowanie Bogu Ojcu, po Komplecie):</span>
+            <p>Clementíssime Pater, ætérne Deus! pro ómnibus peccátis meis et pro peccátis tótius mundi, óffero Tibi Unigénitum tuum in Cruce pendéntem, omnem quóque passiónem, dolórem, angústiam, pressúram, sánguinem, ac mortem Ejus. Óffero Tibi ea in charitáte et virtúte, qua olim Semetípsum óbtulit pro nobis in ara Crucis. In ejúsdem oblatiónis unióne, óffero meípsum Tibi in láudem, et glóriam, ac beneplácitum tuum sempitérnum. Amen.</p>
+            <span class="rubryka">† In nómine Patris, et Fílii, et Spíritus Sancti. Amen.</span>
+            
+            <div class="back-top"><a href="#top" onclick="scrollToTop()">⬆ Wróć na górę</a></div>
+        </div>
+
+    </div>
 
     <script>
-        function openOffice(tabId) {
-            document.querySelectorAll('.office-section').forEach(sec => sec.classList.remove('active'));
-            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-            document.getElementById(tabId).classList.add('active');
-            const activeBtn = document.getElementById('btn-' + tabId);
-            if (activeBtn) {
-                activeBtn.classList.add('active');
-                activeBtn.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+        // Funkcja przełączania godzin (Płynne karty)
+        function showHour(hourId) {
+            document.querySelectorAll('.hour-section').forEach(sec => sec.classList.remove('active'));
+            document.querySelectorAll('.hour-btn').forEach(btn => btn.classList.remove('active'));
+            
+            document.getElementById(hourId).classList.add('active');
+            event.target.classList.add('active');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Automatyczny wybór godziny na podstawie czasu w telefonie
+        function autoSelectHour() {
+            const hour = new Date().getHours();
+            let target = 'matutinum';
+            if (hour >= 6 && hour < 9) target = 'prima';
+            else if (hour >= 9 && hour < 12) target = 'tercia';
+            else if (hour >= 12 && hour < 15) target = 'sexta';
+            else if (hour >= 15 && hour < 18) target = 'nona';
+            else if (hour >= 18 && hour < 21) target = 'visperas';
+            else if (hour >= 21 || hour < 4) target = 'completas';
+
+            // Znajdź przycisk i aktywuj sekcję
+            const btn = Array.from(document.querySelectorAll('.hour-btn')).find(b => b.getAttribute('onclick').includes(target));
+            if (btn) {
+                document.querySelectorAll('.hour-section').forEach(sec => sec.classList.remove('active'));
+                document.querySelectorAll('.hour-btn').forEach(b => b.classList.remove('active'));
+                document.getElementById(target).classList.add('active');
+                btn.classList.add('active');
             }
         }
-        function autoSelectOffice() {
-            const hour = new Date().getHours();
-            if (hour >= 6 && hour < 7) openOffice('matutinum');
-            else if (hour >= 7 && hour < 9) openOffice('prima');
-            else if (hour >= 9 && hour < 12) openOffice('tertia');
-            else if (hour >= 12 && hour < 15) openOffice('sexta');
-            else if (hour >= 15 && hour < 18) openOffice('nona');
-            else if (hour >= 18 && hour < 21) openOffice('vesperae');
-            else openOffice('completorium');
+
+        // Płynna zmiana wielkości czcionki
+        let currentFontSize = 16;
+        function changeFontSize(direction) {
+            currentFontSize += direction * 2;
+            if (currentFontSize < 12) currentFontSize = 12;
+            if (currentFontSize > 26) currentFontSize = 26;
+            document.body.style.fontSize = currentFontSize + 'px';
+            localStorage.setItem('fontSize', currentFontSize);
         }
-        function setTheme(theme) {
-            document.body.classList.remove('dark-theme', 'sepia-theme');
-            if (theme === 'dark') document.body.classList.add('dark-theme');
-            else if (theme === 'sepia') document.body.classList.add('sepia-theme');
-            localStorage.setItem('selectedTheme', theme);
+
+        // Przełącznik motywów (Dark / Light / Sepia)
+        const themes = ['dark', 'light', 'sepia'];
+        let currentThemeIndex = 0;
+        function toggleTheme() {
+            currentThemeIndex = (currentThemeIndex + 1) % themes.length;
+            const newTheme = themes[currentThemeIndex];
+            document.documentElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            
+            const btn = document.getElementById('themeBtn');
+            if (newTheme === 'dark') btn.textContent = '🌙';
+            else if (newTheme === 'light') btn.textContent = '☀️';
+            else btn.textContent = '📜';
         }
-        window.addEventListener('DOMContentLoaded', () => {
-            setTheme(localStorage.getItem('selectedTheme') || 'light');
-            autoSelectOffice();
-        });
+
+        function scrollToTop() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Ładowanie zapisanych ustawień użytkownika przy starcie
+        window.onload = function() {
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme) {
+                document.documentElement.setAttribute('data-theme', savedTheme);
+                currentThemeIndex = themes.indexOf(savedTheme);
+                const btn = document.getElementById('themeBtn');
+                if (savedTheme === 'dark') btn.textContent = '🌙';
+                else if (savedTheme === 'light') btn.textContent = '☀️';
+                else btn.textContent = '📜';
+            } else {
+                autoSelectHour(); // Auto-wybór godziny tylko przy pierwszym uruchomieniu bez preferencji
+            }
+
+            const savedSize = localStorage.getItem('fontSize');
+            if (savedSize) {
+                currentFontSize = parseInt(savedSize);
+                document.body.style.fontSize = currentFontSize + 'px';
+            }
+        };
     </script>
 </body>
 </html>
